@@ -1,36 +1,35 @@
-import express from 'express';
-import { PrismaClient } from './generated/prisma';
-import swaggerJSDoc from 'swagger-jsdoc';
-import swaggerUi from 'swagger-ui-express';
-
-const prisma = new PrismaClient();
-const app = express();
-app.use(express.json());
-const port = 3000;
-
-const swaggerOptions = {
-  swaggerDefinition: {
-    openapi: '3.0.0',
-    info: {
-      title: 'API de Locação de Jogos',
-      version: '1.0.0',
-      description: 'Documentação da API para o serviço de locação de jogos',
-    },
-    servers: [
-      {
-        url: `http://localhost:${port}`,
-      },
-    ],
-  },
-  apis: ['./src/api.ts'],
+"use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
 };
-
-const swaggerDocs = swaggerJSDoc(swaggerOptions);
-app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocs));
-
+Object.defineProperty(exports, "__esModule", { value: true });
+const express_1 = __importDefault(require("express"));
+const prisma_1 = require("./generated/prisma");
+const swagger_jsdoc_1 = __importDefault(require("swagger-jsdoc"));
+const swagger_ui_express_1 = __importDefault(require("swagger-ui-express"));
+const prisma = new prisma_1.PrismaClient();
+const app = (0, express_1.default)();
+app.use(express_1.default.json());
+const port = 3000;
+const swaggerOptions = {
+    swaggerDefinition: {
+        openapi: '3.0.0',
+        info: {
+            title: 'API de Locação de Jogos',
+            version: '1.0.0',
+            description: 'Documentação da API para o serviço de locação de jogos',
+        },
+        servers: [
+            {
+                url: `http://localhost:${port}`,
+            },
+        ],
+    },
+    apis: ['./src/api.ts'],
+};
+const swaggerDocs = (0, swagger_jsdoc_1.default)(swaggerOptions);
+app.use('/api-docs', swagger_ui_express_1.default.serve, swagger_ui_express_1.default.setup(swaggerDocs));
 // --- ROTAS DE JOGOS (GAMES) ---
-
-
 // BUSCA TODA A LISTA
 /**
  * @swagger
@@ -43,10 +42,9 @@ app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocs));
  *         description: Sucesso. Retorna uma lista de jogos.
  */
 app.get('/games', async (req, res) => {
-  const games = await prisma.game.findMany();
-  res.json(games);
+    const games = await prisma.game.findMany();
+    res.json(games);
 });
-
 // BUSCA POR ID
 /**
  * @swagger
@@ -73,12 +71,11 @@ app.get('/games/:id', async (req, res) => {
             where: { id: Number(id) },
         });
         res.json(game);
-    } catch (error) {
+    }
+    catch (error) {
         res.status(404).json({ error: 'Jogo não encontrado' });
     }
 });
-
-
 // CRIA UM NOVO JOGO
 /**
  * @swagger
@@ -105,17 +102,15 @@ app.get('/games/:id', async (req, res) => {
  *         description: Jogo criado com sucesso.
  */
 app.post('/games', async (req, res) => {
-  const { title, platform } = req.body;
-  const newGame = await prisma.game.create({
-    data: {
-      title: title,
-      platform: platform,
-    },
-  });
-  res.status(201).json(newGame);
+    const { title, platform } = req.body;
+    const newGame = await prisma.game.create({
+        data: {
+            title: title,
+            platform: platform,
+        },
+    });
+    res.status(201).json(newGame);
 });
-
-
 //ATUALIZA UM JOGO
 /**
  * @swagger
@@ -147,25 +142,24 @@ app.post('/games', async (req, res) => {
  *         description: Jogo não encontrado.
  */
 app.put('/games/:id', async (req, res) => {
-  try {
-    const { id } = req.params;
-    const { title, platform } = req.body;
-    const updatedGame = await prisma.game.update({
-      where: {
-        id: Number(id),
-      },
-      data: {
-        title: title,
-        platform: platform,
-      },
-    });
-    res.json(updatedGame);
-  } catch (error) {
-    res.status(404).json({ error: 'Jogo não encontrado' });
-  }
+    try {
+        const { id } = req.params;
+        const { title, platform } = req.body;
+        const updatedGame = await prisma.game.update({
+            where: {
+                id: Number(id),
+            },
+            data: {
+                title: title,
+                platform: platform,
+            },
+        });
+        res.json(updatedGame);
+    }
+    catch (error) {
+        res.status(404).json({ error: 'Jogo não encontrado' });
+    }
 });
-
-
 // APAGA UM JOGO
 /**
  * @swagger
@@ -185,21 +179,20 @@ app.put('/games/:id', async (req, res) => {
  *       '404':
  *         description: Jogo não encontrado.
  */
-
 app.delete('/games/:id', async (req, res) => {
-  try {
-    const { id } = req.params;
-    await prisma.game.delete({
-      where: {
-        id: Number(id),
-      },
-    });
-    res.status(204).send();
-  } catch (error) {
-    res.status(404).json({ error: 'Jogo não encontrado' });
-  }
+    try {
+        const { id } = req.params;
+        await prisma.game.delete({
+            where: {
+                id: Number(id),
+            },
+        });
+        res.status(204).send();
+    }
+    catch (error) {
+        res.status(404).json({ error: 'Jogo não encontrado' });
+    }
 });
-
 app.listen(port, () => {
-  console.log(`Servidor rodando com sucesso em http://localhost:${port}`);
+    console.log(`Servidor rodando com sucesso em http://localhost:${port}`);
 });
