@@ -5,8 +5,7 @@
   "main": "api.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "nodemon --exec ts-node src/api.ts"
-    
+    "dev": "npx nodemon --exec npx ts-node src/api.ts"
   },
   "repository": {
     "type": "git",
@@ -21,7 +20,8 @@
   "homepage": "https://github.com/ZeusFontes/api-games#readme",
   "dependencies": {
     "@prisma/client": "^6.16.3",
-    "express": "^5.1.0"
+    "express": "^5.1.0",
+    "zod": "^4.1.11"
   },
   "devDependencies": {
     "@types/express": "^5.0.3",
